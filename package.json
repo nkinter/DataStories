@@ -12,6 +12,9 @@
     "express": "~4.15.5",
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "dynamodb": "~1.0.0",
+    "dynode": "~0.6.1",
+    "express-joi": "latest"
   }
 }

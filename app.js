@@ -4,6 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var dynode = require('dynode');
+console.log(process.env.VE_DYNAMO_KEY);
+console.log(process.env.VE_DYNAMO_SECRET);
+dynode.auth({accessKeyId: process.env.VE_DYNAMO_KEY, secretAccessKey: process.env.VE_DYNAMO_SECRET});
+var Joi = require('express-joi');
+
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
