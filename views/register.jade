@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    p This is a registration page. Good luck!
+    form(action='/users/register/submit', method='POST')
+        div(class='form-group')
+            label(for='username') Username
+            input(type='text', class='form-control', placeholder='Enter Username', id='username', name='username')
+        div(class='form-group')
+            label(for='email') Email Address
+            input(type='text', class='form-control', placeholder='Enter Email', id='email', name='email')
+            small(id='emailHelp', class='form-text text-muted') We'll never share your email with anyone else.
+        div(class='form-group')
+            label(for='password1') Password
+            input(type='password', class='form-control', placeholder='Password', id='password1', name='password1')
+        div(class='form-group')
+            label(for='password2') Re-enter Password
+            input(type='password', class='form-control', placeholder='Confirm Password', id='password2', name='password2')
+        button(type='submit', class='btn btn-primary') Submit
