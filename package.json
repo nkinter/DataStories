@@ -16,6 +16,7 @@
     "serve-favicon": "~2.4.5",
     "dynamodb": "~1.0.0",
     "dynode": "~0.6.1",
-    "express-joi": "latest"
+    "express-joi": "latest",
+    "stylus": "0.54.5"
   }
 }

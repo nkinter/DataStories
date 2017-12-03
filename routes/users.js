@@ -56,12 +56,68 @@ router.post('/register/submit', function(req, res, next) {
             salt:hashedPassword[1]
         };
 
-        dynode.putItem("ve_users", newUser, function(err, result) {
-            if (err) res.render('register', {message: "Error adding user - " + err.toString()});
+        var opts = {AttributesToGet: ["user_id"], ConsistentRead : true};
+        dynode.getItem("ve_users", req.body.username, opts, function(err, result) {
+            if (err) {
+                console.log(err);
+                res.render('register', {message: "Error adding user."});
+            }
+            console.log(req.body.username);
             console.log(result);
-            res.render('index', {message: "Success adding user"});
+            if (result!==null){
+                res.render('register', {message: "Username already exists. Please try again."});
+            } else {
+                dynode.putItem("ve_users", newUser, function(err, result) {
+                    if (err) res.render('register', {message: "Error adding user - " + err.toString()});
+                    console.log(result);
+                    req.session.user = {username: newUser.user_id, email: newUser.email};
+                    res.render('protectedpage', {message: "You have a session", username: req.session.user.username});
+                });
+            }
         });
     }
 });
+
+router.get('/login', function(req, res, next) {
+    res.render('login', { title: 'Login' });
+});
+
+router.post('/login/auth', function(req, res, next) {
+    if(!req.body.username || !req.body.password){
+        res.render('login', {message: "Please enter both email and password"});
+    } else {
+
+        var opts = {AttributesToGet: ["salt","password", "user_id", "email"], ConsistentRead : true};
+        dynode.getItem("ve_users", req.body.username, opts, function(err, result) {
+            if (err) {
+                res.render('login', {message: "Invalid credentials!"});
+            }
+            else {
+                console.log(req.body.username);
+                console.log(result);
+                if (result===null){
+                    res.render('login', {message: "Invalid credentials!"});
+                } else {
+                    var hash = crypto.createHmac('sha512', result["salt"]);
+                    hash.update(req.body.password);
+                    if (hash.digest('hex')===result["password"]){
+                        console.log('Success');
+                        req.session.user = {username: result["user_id"], email: result["email"]};
+                        res.render('protectedpage', {message: "You have a session", username: req.session.user.username});
+                    } else {
+                        res.render('login', {message: "Invalid credentials!"});
+                    }
+                }
+            }
+        });
+    }
+});
+
+router.get('/logout', function(req, res, next){
+    req.session.destroy(function(err) {
+        res.render('index',{title: "Visual Essays", message: "You have successfully logged out"})
+    })
+});
+
 
 module.exports = router;

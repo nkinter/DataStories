@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    p= message
+    form(action='/users/login/auth', method='POST')
+        div(class='form-group')
+            label(for='username') Username
+            input(type='text', class='form-control', placeholder='Enter Username', id='username', name='username')
+        div(class='form-group')
+            label(for='password') Password
+            input(type='password', class='form-control', placeholder='Password', id='password', name='password')
+        button(type='submit', class='btn btn-primary') Login

@@ -2,6 +2,7 @@ extends layout
 
 block content
     p This is a registration page. Good luck!
+    p= message
     form(action='/users/register/submit', method='POST')
         div(class='form-group')
             label(for='username') Username

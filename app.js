@@ -3,7 +3,9 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
+var stylus = require('stylus');
 var dynode = require('dynode');
 console.log(process.env.VE_DYNAMO_KEY);
 console.log(process.env.VE_DYNAMO_SECRET);
@@ -11,9 +13,9 @@ dynode.auth({accessKeyId: process.env.VE_DYNAMO_KEY, secretAccessKey: process.en
 var Joi = require('express-joi');
 
 
-
 var index = require('./routes/index');
 var users = require('./routes/users');
+var protectedpage = require('./routes/protectedpage');
 
 var app = express();
 
@@ -27,10 +29,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret: "123456789"}));
+app.use(stylus.middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/protectedpage', protectedpage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
