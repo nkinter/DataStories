@@ -1,0 +1,26 @@
+extends privateLayout
+
+block content
+    p Use the below fields to update your information
+    p= message
+    form(action='/users/profile/updateEmail', method='POST')
+        div(class='form-group')
+            label Username :
+            input(type='text', class='form-control-plaintext', placeholder=user.username, readonly)
+        div(class='form-group')
+            label(for='email') Email Address
+            input(type='text', class='form-control', value=user.email, id='email', name='email')
+            small(id='emailHelp', class='form-text text-muted') We'll never share your email with anyone else.
+        button(type='submit', class='btn btn-primary') Submit
+    p Change password below
+    form(action='/users/profile/updatePassword', method='POST')
+        div(class='form-group')
+            label(for='currentPassword') Current Password
+            input(type='password', class='form-control', placeholder='Current Password', id='currentPassword', name='currentPassword')
+        div(class='form-group')
+            label(for='password1') New Password
+            input(type='password', class='form-control', placeholder='New Password', id='password1', name='password1')
+        div(class='form-group')
+            label(for='password2') Re-enter New Password
+            input(type='password', class='form-control', placeholder='Re-enter New Password', id='password2', name='password2')
+        button(type='submit', class='btn btn-primary') Submit

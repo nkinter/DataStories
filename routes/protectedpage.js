@@ -4,8 +4,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
     if(req.session.user){
-        console.log(req.session.user);
-        res.render('protectedpage', {username: req.session.user.username})
+        res.render('protectedpage', {user: req.session.user})
     } else {
         var err = new Error("Not logged in!");
         console.log(err);

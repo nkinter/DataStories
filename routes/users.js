@@ -71,7 +71,7 @@ router.post('/register/submit', function(req, res, next) {
                     if (err) res.render('register', {message: "Error adding user - " + err.toString()});
                     console.log(result);
                     req.session.user = {username: newUser.user_id, email: newUser.email};
-                    res.render('protectedpage', {message: "You have a session", username: req.session.user.username});
+                    res.render('protectedpage', {message: "You have a session", user: req.session.user});
                 });
             }
         });
@@ -103,7 +103,7 @@ router.post('/login/auth', function(req, res, next) {
                     if (hash.digest('hex')===result["password"]){
                         console.log('Success');
                         req.session.user = {username: result["user_id"], email: result["email"]};
-                        res.render('protectedpage', {message: "You have a session", username: req.session.user.username});
+                        res.render('protectedpage', {message: "You have a session", user: req.session.user});
                     } else {
                         res.render('login', {message: "Invalid credentials!"});
                     }
@@ -118,6 +118,27 @@ router.get('/logout', function(req, res, next){
         res.render('index',{title: "Visual Essays", message: "You have successfully logged out"})
     })
 });
+
+router.get('/profile', function(req, res, next) {
+    if(req.session.user){
+        res.render('profile', {user: req.session.user})
+    } else {
+        var err = new Error("Not logged in!");
+        console.log(err);
+        res.render('login', {message: "Please login to access this page."});
+    }
+});
+
+router.post('/profile/update', function(req, res, next) {
+    if(req.session.user){
+        res.render('protectedpage', {user: req.session.user})
+    } else {
+        var err = new Error("Not logged in!");
+        console.log(err);
+        res.render('login', {message: "Please login to access this page."});
+    }
+});
+
 
 
 module.exports = router;
